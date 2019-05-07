@@ -3,18 +3,15 @@
 class  db{
     private $dbhost = 'localhost';
     private $user= 'root';
-    private $password = '0000';
-    private $dbname = 'slim';
+    private $password = 'root';
+    private $dbname = 'dbname';
 
     public function connecti()
     {
-        $mysqlconnect = 'mysql:host=localhost;dbname=slim';
-        $dbConnection = new PDO($mysqlconnect,'root', '0000');
+        $mysqlconnect = 'mysql:host=localhost;dbname=dbname';
+        $dbConnection = new PDO($mysqlconnect,'root', 'root');
         $dbConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $dbConnection;
-
-//        $conna = new mysqli('localhost', 'root', '0000','slim') or die("Connect failed: %s\n". $conn -> error);
-
     }
 }
 

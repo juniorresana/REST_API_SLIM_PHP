@@ -3,6 +3,8 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
+//composer created instance
+
 require 'vendor/autoload.php';
 require 'db.php';
 
@@ -78,34 +80,23 @@ $app->get('/delete/{id}', function (Request $request, Response $response, array 
 $app->get('/add', function (\Slim\Http\Request $request, \Slim\Http\Response $response) {
     $userpassword = $request->getParam('userp');
     $username = $request->getParam('username');
-    $contact = $request->getParam('contact');
-//   $date = $request->getParam('');
-    $category = $request->getParam('category');
-    $adname = $request->getParam('adname');
-    $adtext = $request->getParam('adtext');
-    $region = $request->getParam('region');
 
     $sql = "insert into tab (
-userpassword, username, contact, datetime, category, adname, adtext, region) 
-values (:userpassword,:username, :contact, now(), :category, :adname,:adtext,:region);";
+userp, username, datetime) 
+values (:userp,:username, now());";
 
 
     try{
         $db = new db();
         $db = $db->connecti();
         $stmnt = $db->prepare($sql);
-        $stmnt -> bindParam(':userpassword', $userpassword);
+        $stmnt -> bindParam(':userp', $userp);
         $stmnt -> bindParam(':username', $username);
-        $stmnt -> bindParam(':contact', $contact);
-        $stmnt -> bindParam(':category', $category);
-        $stmnt -> bindParam(':adname', $adname);
-        $stmnt -> bindParam(':adtext', $adtext);
-        $stmnt -> bindParam(':region', $region);
-
+        
         $stmnt->execute();
         echo "ok";
 
-        $stmnt = $db->prepare("delete from tab where datetime <= (now() - interval 50 day);");
+        $stmnt = $db->prepare("delete from tab where datetime <= (now() - interval 1 day);");
         $stmnt->execute();
 
     } catch (PDOException $e){
@@ -118,12 +109,10 @@ values (:userpassword,:username, :contact, now(), :category, :adname,:adtext,:re
 
 $app->get('/mix1', function (\Slim\Http\Request $request, \Slim\Http\Response $response) {
 
-    $category = $request->getParam('category');
-    $region = $request->getParam('region');
+    $param1 = $request->getParam('param1');
+    $param2 = $request->getParam('param2');
 
-
-
-    $sql = "select * from tab where category = '$category' or region='$region'";
+    $sql = "select * from tab where p1 = '$param1' or p2='$param2'";
 
 
     try{
@@ -142,12 +131,12 @@ $app->get('/mix1', function (\Slim\Http\Request $request, \Slim\Http\Response $r
 
 $app->get('/mix2', function (\Slim\Http\Request $request, \Slim\Http\Response $response) {
 
-    $category = $request->getParam('category');
-    $region = $request->getParam('region');
+    $p1 = $request->getParam('param1');
+    $p2 = $request->getParam('param2');
 
 
 
-    $sql = "select * from tab where category = '$category' and region='$region'";
+    $sql = "select * from tab where p1 = '$param1' and p2='$param2'";
 
 
     try{
